@@ -55,7 +55,7 @@ I decided to use the first way due it takes less execution time than the second 
 
 3. Now sort the file. Select a sorting style. Which one did you use? Why? What is the most common command in Linux to sort a file and what happens when you use the default option, i.e. using no specific sorting option?
 
-I decide to use the most common command 'sort' to sort the file, selecting the default style with the option -o that writes the output to a file. The default sort option arranges at the beginning the numerical lines followed for the alphabets. 
+I decided to use the most common command 'sort' to sort the file, selecting the default style with the option -o that writes the output to a file. The default sort option arranges at the beginning the numerical lines followed for the alphabets. 
 
 #Sort the file.
 sort -o ResultsA.txt ResultsA.txt
