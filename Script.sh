@@ -21,9 +21,7 @@ End=$(( $MiB/$OneLineZize -1 )) #Minus one due the already line writted.
 #Writting the remaining lines.
 for i in $(seq 1 $End);
 do 
-
 echo "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1)" >> ResultsA.txt
-
 done
 
 #Sort the file.
