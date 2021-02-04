@@ -1,0 +1,76 @@
+ script using /bin/bash that does the following:
+
+1. Create a series of random numbers and strings of characters and write them to a file, no more than 15 characters for each line. As characters assume the Latin Alphabet, [A-Za-z], without special characters and the numbers 0,1,2,3,4,5,6,7,8,9. Example of a line with 15 characters: 123456789aBcDeF.
+
+Explain the process how you create the lines in your file.
+
+The lines were created using a combination of the next commands:
+
+cat /dev/urandom | tr -dc "a-zA-Z0-9" | fold -w 15 | head -n 1
+
+1. /dev/urandom  Gives the random bytes.
+2. tr            Delete undesired characters.
+3. fold          Wraps each input line.
+4. head          Gets only the first line of the file.
+
+2. Control the size of the file. If the file reaches the size of 1 MiB interrupt the creation of more random lines. What is a good way to control the size of a file?  Discuss what options you know and why you picked one of them. Come up with two ways in Linux to find the size of a file. This step is there to protect you from filling up your disk.
+The two ways I know to control the size of the file are as follows:
+
+First way.
+Doing a previous calculus of the weight of one single line, to determine the number of lines needed to complete the required one MiB size file.
+
+#Write one random line to the file "ResultsA.txt"
+echo "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1)" > ResultsA.txt
+
+#Let's get the size of one single line.
+LineZize=$(du -b ResultsA.txt | awk '{print $1}')
+
+#Let's get the number of lines needed to get the one MiB size file.
+End=$(( $MiB/$LineZize -1 )) #Minus one due the already line writted.
+
+#Writting the remaining lines.
+for i in $(seq 1 $End);
+do 
+echo "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1)" >> ResultsA.txt
+done
+
+Second way.
+Writing one line at a time and then weigh the file to make sure it's not oversized.
+
+#Create the file.
+touch ResultsA.txt
+
+#Write the file and control its size.
+ResultsZize=0
+until [[ $ResultsZize -ge $MiB ]]; 
+do
+
+echo "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1)" >> ResultsA.txt
+
+ResultsZize=$(du -b ResultsA.txt | awk '{print $1}')
+
+done
+
+I decided to use the first way due it takes less execution time than the second one, avoiding taking measures along over thousands of iterations.
+
+3. Now sort the file. Select a sorting style. Which one did you use? Why? What is the most common command in Linux to sort a file and what happens when you use the default option, i.e. using no specific sorting option?
+
+I decide to use the most common command 'sort' to sort the file, selecting the default style with the option -o that writes the output to a file. The default sort option arranges at the beginning the numerical lines followed for the alphabets. 
+
+#Sort the file.
+sort -o ResultsA.txt ResultsA.txt
+
+4. Remove all lines that start with an “a”, no matter if it is in uppercase or lowercase. Safe the result into a new file. Use regular expressions to do this.
+
+#Remove all the "a" "A" statring lines.
+sed '/^[aA]/ d' ResultsA.txt >ResultsB.txt 
+
+5. How many lines were removed?
+2,108 lines were removed.
+
+#Let's get the number of removed lines.
+OriginalLines=$(wc -l ResultsA.txt | awk '{print $1}')
+FinalLines=$(wc -l ResultsB.txt | awk '{print $1}')
+RemovedLines=$(($OriginalLines - $FinalLines))
+
+That's it, thank you for your attention.
