@@ -17,6 +17,7 @@ cat /dev/urandom | tr -dc "a-zA-Z0-9" | fold -w 15 | head -n 1
 2. Control the size of the file. If the file reaches the size of 1 MiB interrupt the creation of more random lines. What is a good way to control the size 
 of a file?  Discuss what options you know and why you picked one of them. Come up with two ways in Linux to find the size of a file. This step is there to
 protect you from filling up your disk.
+
 The two ways I know to control the size of the file are as follows:
 
 First way.
